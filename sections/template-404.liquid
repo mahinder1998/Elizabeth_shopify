@@ -1,0 +1,43 @@
+<div class="max-w-md">
+  <h1 class="text-5xl font-bold text-center">
+    {{ section.settings.title }}
+  </h1>
+  <div class="my-4">
+    <p class="text-base leading-normal md:text-lg">{{ section.settings.sub-title }}</p>
+  </div>
+  <div class="my-4 text-center">
+    <a href="{{shop.url}}" class="bg-slate-950 text-white px-6 py-3 inline-block hover:bg-zinc-800">
+      {{ section.settings.button-title }}
+    </a>
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Template 404",
+    "tag": "section",
+    "class": "flex items-center justify-center py-7 h-screen",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "404",
+        "info": "Title Description"
+      }, {
+        "type": "text",
+        "id": "sub-title",
+        "label": "Sub Title",
+        "default": "The page you looking not found",
+        "info": "Title Description"
+      }, {
+        "type": "text",
+        "id": "button-title",
+        "label": "Button Title",
+        "default": "Back To Homepage",
+        "info": "Title Description"
+      }
+    ]
+  }
+{%endschema%}
