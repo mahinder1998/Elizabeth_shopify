@@ -1,0 +1,203 @@
+<article class="py-8">
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'article_title' %}
+      <div class="flex justify-center items-center">
+        <div class="max-w-7xl text-center">
+          <a href="{{blog.url}}" class="text-base uppercase text-gray-500 hover:text-gray-900 font-bold">
+            {{ blog.title }}
+          </a>
+          <h1 class="text-4xl md:text-6xl font-medium">
+            {{ article.title }}
+          </h1>
+        </div>
+      </div>
+      {% when 'article_author' %}
+      <div class="flex justify-center items-center">
+        <div class="max-w-7xl text-center">
+          {% if section.settings.enable_author %}
+            <small>{{ article.author }}</small>
+          {% endif %}
+        </div>
+      </div>
+      {% when 'article_published_date' %}
+      <div class="flex justify-center items-center">
+        <div class="max-w-7xl text-center">
+          {% if section.settings.enable_piblished_date %}
+            <time datetime="{{ article.published_at | date: '%y-%m-%y'}}">{{ article.published_at | date: '%y-%m-%y' }}</time>
+          {% endif %}
+        </div>
+      </div>
+      {% when 'feature_image' %}
+      <div class="max-w-7xl bg-blue rounded-lg mx-2 md:mx-auto overflow-hidden">
+        {% if article.image != blank %}
+          <img
+            class="w-full h-80 md:h-96 object-cover object-center p-5"
+            src="{{article.image | img_url: 'large'}}"
+            alt="{{ article.image.alt }}" />
+        {% else %}
+          {% assign placeholder_image = "lifestyle-1" %}
+          {{ placeholder_image | placeholder_svg_tag: 'w-full h-80 md:h-96 object-cover object-center p-5' }}
+        {% endif %}
+      </div>
+      {% when 'article_content' %}
+      <div class="flex items-center justify-center">
+        <div class="max-w-4xl text-center py-4">
+          {{ article.content }}
+        </div>
+      </div>
+    {% endcase %}
+  {% endfor %}
+</article>
+
+
+{% if blog.comments_enabled? %}
+  <div id="comments" class="my-8 ">
+    <div class="max-w-3xl mx-auto px-3">
+      {% if article.comments_count > 0 %}
+        <div class="flex-1 items-centerjustify-center mx-auto mx-w-4xl">
+          <h1 class="text-lg mb-4 font-medium">See what people are saying</h1>
+        </div>
+        {% paginate article.comments by 5 %}
+          {% for article_comment in article.comments %}
+            <div class="flex-1  items-center gap-2 border my-4 px-3 sm:px-6 sm:py-4 leading-relaxed">
+              <span class="comment-author font-bold">{{ article_comment.author }}</span>
+              <span class="text-xs text-gray-400 ">{{ article_comment.created_at | date: format: 'default' }}</span>
+              <p class="text-sm">
+                {{ article_comment.content }}
+              </p>
+            </div>
+          {% endfor %}
+
+
+          {% if paginate.pages > 1 %}
+            {{ paginate | default_pagination }}
+          {% endif %}
+        {% endpaginate %}
+      {% else %}
+        <div class="max-w-4xl flex justify-center">
+          There is no comments in this article
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div id="comment_form" class="mb-8">
+    {% form 'new_comment', article %}
+      <div class="max-w-3xl mx-auto gap-4 flex flex-col px-3 ">
+        {% if form.errors %}
+          <div class="border p-5">
+            <div class="flex flex-row item-center w-full my-3">
+              <div class="text-red-500">
+                {% render 'icon-failed' %}
+              </div>
+              <div class="text-sm font-medium ml-3">
+                Oh no ! your comment was not posted
+              </div>
+            </div>
+
+            <ul class="px-4 mb-3 ml-7 list-decimal">
+              {% for error in form.errors %}
+                <li>
+                  <span>{{ form.errors.message[error] }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+
+          </div>
+        {% elsif form.posted_successfully? %}
+          <div class="flex flex-row items-center w-full my-3">
+            <div class="text-green-500">
+              {% render 'icon-success' %}
+            </div>
+            <div class="text-sm font-medium ml-3">
+              Comment is posted successfully
+            </div>
+          </div>
+        {% endif %}
+        <div class="flex flex-col items-center justify-center gap-3 md:flex-row">
+          <div class="flex flex-col gap-2 w-full md:w-1/2">
+            <label class="text-sm w-full block uppercase" for="comment_author">Name</label>
+            <input
+              type="text"
+              placeholder="Jane Doe"
+              name="comment[author]"
+              id="comment_author"
+              class="p-3 border text-sm"
+              required>
+          </div>
+          <div class="flex flex-col gap-2 w-full md:w-1/2">
+            <label class="text-sm w-full block uppercase" for="comment_email">Email</label>
+            <input
+              type="email"
+              placeholder="jane@doe.com"
+              id="comment_email"
+              name="comment[email]"
+              class="p-3 border text-sm"
+              required>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label class="text-sm w-full block uppercase" for="comment_content">Comment</label>
+          <textarea
+            class="p-3 border text-sm resize-none"
+            cols="10"
+            name="comment[body]"
+            id="comment_content"
+            required></textarea>
+        </div>
+        <div class="flex flex-col ">
+          <input
+            type="submit"
+            class="border text-sm bg-slate-900 uppercase text-white py-3 hover:bg-slate-600"
+            value="Post Comment">
+        </div>
+      </div>
+    {% endform %}
+  </div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Template Article",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_author",
+        "default": true,
+        "label": "Display Author Name"
+      }, {
+        "type": "checkbox",
+        "id": "enable_piblished_date",
+        "default": true,
+        "label": "Disply Published Date"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "article_title",
+        "name": "title",
+        "limit": 1
+      },
+      {
+        "type": "article_author",
+        "name": "Author",
+        "limit": 1
+      },
+      {
+        "type": "article_published_date",
+        "name": "Published Date",
+        "limit": 1
+      },
+      {
+        "type": "feature_image",
+        "name": "Thumbinal",
+        "limit": 1
+      }, {
+        "type": "article_content",
+        "name": "content",
+        "limit": 1
+      }
+    ]
+  }
+{% endschema %}
