@@ -1,8 +1,14 @@
 {
-    "sections": {
-        "template":{
-            "type": "template-collection"
-        }
-    },
-    "order": ["template"]
+  "sections": {
+    "template": {
+      "type": "template-collection",
+      "settings": {
+        "number_of_products_per_page": 6,
+        "enable_vendor": true
+      }
+    }
+  },
+  "order": [
+    "template"
+  ]
 }
