@@ -16,7 +16,7 @@
                     {% assign collection_image = collection.products.first.image %}
                   {% endif %}
                   <img
-                    src="{{ collection_image | img_url: 'medium' }}"
+                    src="{{ collection_image | img_url: 'original' }}"
                     alt="{{ collection.title | escapes }}"
                     class="w-full h-full object-cover transition duration-1000 ease-in-out transform hover:scale-125">
                 </div>
