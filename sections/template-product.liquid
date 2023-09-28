@@ -1,3 +1,23 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+<style>
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #000;
+    top: auto;
+    height: 20px;
+  }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 20px;
+  }
+  .swiper-pagination-bullet-active {
+    background: #000;
+  }
+</style>
+
+
 <div class="max-w-6xl mx-auto my-8">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
     <div class="product--medias">
@@ -8,7 +28,45 @@
           </div>
         {% endfor %}
       </div>
+
+      <div class="md:hidden">
+        <div class="swiper h-94">
+          <div class="swiper-wrapper">
+            {% for media in product.media %}
+              <div class="swiper-slide">
+                <div class="h-80 overflow-hidden p-2">
+                  {% render 'product-media', media: media %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+
+        </div>
+      </div>
+
     </div>
     <div class="product--information"></div>
   </div>
 </div>
+
+<script>
+  const swiper = new Swiper('.swiper', { // Optional parameters
+    direction: 'horizontal',
+    loop: true,
+
+// If we need pagination
+    pagination: {
+      el: '.swiper-pagination'
+    },
+
+// Navigation arrows
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    }
+  });
+</script>
