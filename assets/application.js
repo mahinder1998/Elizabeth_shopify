@@ -27,3 +27,18 @@ submenuButton.forEach(toggle =>{
     })
 })
 
+
+
+
+// search toggle start
+const searchToggle = document.querySelector(".search_toggle");
+const searchWrap = document.querySelector(".search_wrapper");
+const searchClose = document.querySelector(".search_close");
+
+searchToggle.addEventListener("click", ()=>{
+    searchWrap.classList.add("search_wrapper_active");
+}) 
+
+searchClose.addEventListener("click", ()=>{
+    searchWrap.classList.remove("search_wrapper_active");
+}) 

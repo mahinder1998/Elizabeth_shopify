@@ -1,135 +1,135 @@
 {% assign main_menu_linklists = linklists[section.settings.menu].links %}
 <header>
-  <div class="relative bg-white">
-    <div class="mx-auto px-4 sm:px-6">
-      <div class="flex justify-between items-center py-6 md:justify-start ">
-        <!--store name or store logo -->
-        <div class="flex justify-start lg:flex-1 truncate">
-          <h1 class="text-xl font-bold">{{ shop.name }}</h1>
-        </div>
-
-        <!-- Mobile Burger Menu start-->
-        <div class="md:hidden">
-          <button class="mobile-menu-btn bg-white border p-2 rounded">
-            {% render 'icon-menu' %}
-          </button>
-        </div>
-
-        <!-- Mobile Burger Menu end-->
-
-
-        <!-- Navigation Menu -->
-        <nav class="hidden md:flex space-x-10 lg:flex-1 lg:justify-center">
-          <ul class="flex space-x-6">
-            {% for link in main_menu_linklists %}
-              {% if link.links != blank %}
-                <li class="relative">
-                  <button type="button" class="peer inline-flex items-center text-base text-gray-500 hover:text-gray-900 ">
-                    {{ link.title }} {% render 'icon-chevon' %}
-                  </button>
-
-                  <!-- submenu -->
-                  <div class="hidden peer-hover:flex hover:flex w-[200px]  absolute z-10 -ml-5 mt-0 transform px-2 w-screen max-w-xs sm:px-0 lg:ml-0 lg:left-0 ">
-                    <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
-                      <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                        <!-- create the sublinks -->
-                        {% for childlink in link.links %}
-                          <a href="{{ childlink.url }}" class="hover:bg-gray-100">
-                            {{ childlink.title }}
-                          </a>
-                        {% endfor %}
-
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              {% else %}
-                <li class="relative">
-                  <a href="{{link.url}}" class="{% if link.active == true  %}text-red-900 {%endif%} text-base text-gray-500 hover:text-gray-900">{{ link.title }}</a>
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </nav>
-
-        <!-- Right side links -->
-        <div class="hidden md:flex space-x-10 lg:flex-1 lg:justify-end">
-          <ul class="flex space-x-6">
-            <li class="relative">
-              <a href="{{routes.cart_url}}" class="text-base text-gray-500 hover:text-gray-900 inline-block w-5 h-5">
-                {% render 'icon-shopping-bag' %}
-              </a>
-            </li>
-
-            {% if shop.customer_accounts_enabled %}
-              <li class="relative">
-                <a href="{{routes.account_login_url}}" class="text-base text-gray-500 hover:text-gray-900">Login</a>
-              </li>
-              <li class="relative">
-                <a href="{{routes.account_register_url}}" class="text-base text-gray-500 hover:text-gray-900">Register</a>
-              </li>
-            {% endif %}
-
-          </ul>
-        </div>
-
-
-      </div>
-    </div>
-
-    <!--Mobile Menu start-->
-    <div class="hidden mobile-menu-wrap absolute bg-white top-0 left-0 w-full h-screen px-4 py-6  md:hidden ">
-      <!-- Mobile menu header start-->
-      <div class="flex justify-between items-center">
-        <h4 class="font-bold uppercase">{{ section.settings.mobile_menu_tittle }}</h4>
-        <button class="close-menu bg-white border p-2 rounded">
-          {% render 'icon-close' %}
-        </button>
-      </div>
-      <!-- Mobile menu header end-->
-
-      <!-- Mobile links -->
-      <div class="border-t mt-2">
-        <ul>
-
-          {% for link in main_menu_linklists %}
-            {% if link.links != blank %}
-              <li class="relative py-3">
-                <div class="flex items-center justify-between submenu-items">
-                  <a href="{{link.url}}" class="w-[calc(100%-40px)]">{{ link.title }}</a>
-                  <button class="w-10 mobile-submenu-btn">
-                    {% render 'icon-right' %}
-                  </button>
+    <div class="relative bg-white">
+        <div class="mx-auto px-4 sm:px-6">
+            <div class="flex justify-between items-center py-6 md:justify-start">
+                <!--store name or store logo -->
+                <div class="flex justify-start lg:flex-1 truncate">
+                    <h1 class="text-xl font-bold">{{ shop.name }}</h1>
                 </div>
-                <ul class="border-t hidden mobile-submenu">
-                  {% for childlink in link.links %}
-                    <li class="py-3">
-                      <a href="{{childlink.url}}">{{ childlink.title }}</a>
+
+                <!-- Mobile Burger Menu start-->
+                <div class="md:hidden">
+                    <button class="mobile-menu-btn bg-white border p-2 rounded">
+                        {% render 'icon-menu' %}
+                    </button>
+                </div>
+
+                <!-- Mobile Burger Menu end-->
+
+                <!-- Navigation Menu -->
+                <nav class="hidden md:flex space-x-10 lg:flex-1 lg:justify-center">
+                    <ul class="flex space-x-6">
+                        {% for link in main_menu_linklists %} {% if link.links != blank %}
+                        <li class="relative">
+                            <button type="button" class="peer inline-flex items-center text-base text-gray-500 hover:text-gray-900">
+                                {{ link.title }} {% render 'icon-chevon' %}
+                            </button>
+
+                            <!-- submenu -->
+                            <div class="hidden peer-hover:flex hover:flex w-[200px] absolute z-10 -ml-5 mt-0 transform px-2 w-screen max-w-xs sm:px-0 lg:ml-0 lg:left-0">
+                                <div class="shadow-lg border ring-black ring-opacity-5 overflow-hidden rounded-lg">
+                                    <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                        <!-- create the sublinks -->
+                                        {% for childlink in link.links %}
+                                        <a href="{{ childlink.url }}" class="hover:bg-gray-100">
+                                            {{ childlink.title }}
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% else %}
+                        <li class="relative">
+                            <a href="{{link.url}}" class="{% if link.active == true %}text-red-900 {%endif%} text-base text-gray-500 hover:text-gray-900">{{ link.title }}</a>
+                        </li>
+                        {% endif %} {% endfor %}
+                    </ul>
+                </nav>
+
+                <!-- Right side links -->
+                <div class="hidden md:flex space-x-10 lg:flex-1 lg:justify-end">
+                    <ul class="flex space-x-6">
+                        <li class="relative">
+                            <button type="button" class="search_toggle text-base text-gray-500">
+                                {% render 'icon-search' %}
+                            </button>
+                            <a href="{{routes.cart_url}}" class="text-base text-gray-500 hover:text-gray-900 inline-block w-5 h-5">
+                                {% render 'icon-shopping-bag' %}
+                            </a>
+                        </li>
+
+                        {% if shop.customer_accounts_enabled %}
+                        <li class="relative">
+                            <a href="{{routes.account_login_url}}" class="text-base text-gray-500 hover:text-gray-900">Login</a>
+                        </li>
+                        <li class="relative">
+                            <a href="{{routes.account_register_url}}" class="text-base text-gray-500 hover:text-gray-900">Register</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--Mobile Menu start-->
+        <div class="hidden mobile-menu-wrap absolute bg-white top-0 left-0 w-full h-screen px-4 py-6 md:hidden">
+            <!-- Mobile menu header start-->
+            <div class="flex justify-between items-center">
+                <h4 class="font-bold uppercase">{{ section.settings.mobile_menu_tittle }}</h4>
+                <button class="close-menu bg-white border p-2 rounded">
+                    {% render 'icon-close' %}
+                </button>
+            </div>
+            <!-- Mobile menu header end-->
+
+            <!-- Mobile links -->
+            <div class="border-t mt-2">
+                <ul>
+                    {% for link in main_menu_linklists %} {% if link.links != blank %}
+                    <li class="relative py-3">
+                        <div class="flex items-center justify-between submenu-items">
+                            <a href="{{link.url}}" class="w-[calc(100%-40px)]">{{ link.title }}</a>
+                            <button class="w-10 mobile-submenu-btn">
+                                {% render 'icon-right' %}
+                            </button>
+                        </div>
+                        <ul class="border-t hidden mobile-submenu">
+                            {% for childlink in link.links %}
+                            <li class="py-3">
+                                <a href="{{childlink.url}}">{{ childlink.title }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </li>
-                  {% endfor %}
+                    {% else %}
+                    <li class="py-3">
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                    </li>
+                    {% endif %} {% endfor %}
                 </ul>
-              </li>
-            {% else %}
-              <li class="py-3">
-                <a href="{{ link.url }}">{{ link.title }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
+            </div>
+            <!-- mobile links end -->
+        </div>
 
+        <!--Mobile Menu end-->
 
-
-        </ul>
-
-      </div>
-      <!-- mobile links end -->
-
+        <div class="w-full absolute top-0 bg-white border hidden search_wrapper">
+            <button class="absolute right-0 search_close">
+                {% render 'icon-close' %}
+            </button>
+            <div class="h-40 flex justify-center items-center">
+                <form action="{{ routes.search_url }}">
+                  <div class="relative text-gray-500 px-10">
+                    <input type="search" name="q" placeholder="search" class="border border-[#ddd]">
+                  </div>
+                </form> 
+            </div>
+        </div>
     </div>
+</header> 
 
-    <!--Mobile Menu end-->
-
-
-  </div>
-</header>
 
 
 
