@@ -1,0 +1,76 @@
+<div class="h-full flex gap-5 items-center justify-center py-12 px-6 md:px-4 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h1 class="text-center text-3xl font-bold mt-6">Sign in to your account</h1>
+        </div>
+        <div class="mt-8 space-y-10">
+            {% form 'customer_login' %}
+                {% if form.errors%}
+                    <div class="reltaive border border-red-400 bg-red-400 text-red-700 px-4 py-3" >
+                        <strong class="font-bold">Error !</strong>
+                        <p class="block sm:inine">
+                            {{form.errors | default_errors}}
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div class="mt-2">
+                    <label for="email_address" class="sr-only">Email Address</label>
+                    <input type="email" name="customer[email]" id="email_address"
+                    class="relative block w-full px-3 py-2 border"
+                    placeholder="Email Address"
+                    autocomplete="email"
+                    >
+                </div>
+                {%if form.password_needed%}
+                    <div class="mt-2">
+                        <label for="email_address" class="sr-only">Password</label>
+                        <input type="password" name="customer[password]" id="password"
+                        class="relative block w-full px-3 py-2 border"
+                        placeholder="Password"
+                        autocomplete="password"
+                        >
+                    </div>
+                {% endif %}
+                <div class="mt-2">
+                    <button type="submit" class="relative w-full py-2 px-4 text-sm font-medium text-white bg-gray-600 hover:bg-gray-900">
+                        Sign in
+                    </button>
+                </div> 
+            {% endform %}
+        </div>
+    </div>
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h1 class="text-center text-3xl font-bold mt-6">Recover your password</h1>
+        </div>
+        <div class="mt-8 space-y-10">
+            {% form 'reset_customer_password' %}
+                {% if form.errors%}
+                    <div class="reltaive border border-red-400 bg-red-400 text-red-700 px-4 py-3" >
+                        <strong class="font-bold">Error !</strong>
+                        <p class="block sm:inine">
+                            {{form.errors | default_errors}}
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div class="mt-2">
+                    <label for="email" class="sr-only">Email Address</label>
+                    <input type="email" name="email" id="email_address"
+                    class="relative block w-full px-3 py-2 border"
+                    placeholder="Email Address"
+                    autocomplete="email"
+                    >
+                </div>
+                
+                <div class="mt-2">
+                    <button type="submit" class="relative w-full py-2 px-4 text-sm font-medium text-white bg-gray-600 hover:bg-gray-900">
+                        Reover password
+                    </button>
+                </div> 
+            {% endform %}
+        </div>
+
+    </div>
+</div>
