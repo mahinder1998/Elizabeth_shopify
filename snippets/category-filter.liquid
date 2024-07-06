@@ -1,0 +1,8 @@
+{% assign filter_flag = true %}
+{% assign filter_collections = section.settings.collection_name |   split:"," %}
+
+{% comment %} <p>{{filter_collections}}</p> {% endcomment %}
+
+{% for collection_handle in filter_collections %}
+    {% assign filter_flag = false %}
+{% endfor %}

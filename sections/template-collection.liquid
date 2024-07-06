@@ -1,6 +1,10 @@
 <div class="px-4 py-8">
   {% paginate collection.products by section.settings.number_of_products_per_page %}
 
+
+    {% render 'category-filter' %} 
+
+
     <h1 class="text-3xl text-center">
       {{ collection.title }}
     </h1>
@@ -35,6 +39,16 @@
         "id": "enable_vendor",
         "label": "Enable Vendor",
         "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "category_list",
+        "label": "Select category Menu"
+      },
+      {
+        "type": "textarea",
+        "id": "collection_name",
+        "label": "Collection handle seperate by comma"
       }
     ]
   }
