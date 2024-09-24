@@ -103,8 +103,10 @@ function changeItemQuantity(key, quantity) {
         document.querySelector(`[data-key="${key}"] .line-item-price`).textContent = itemPrice;
 
         console.log(totalDiscount, totalPrice, item);
-        loader.classList.remove("flex");
+        setTimeout(()=>{
+          loader.classList.remove("flex");
           loader.classList.add("hidden");
+        }, 500)
     })
     .catch(error => {
         console.error('Error:', error);
