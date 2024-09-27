@@ -42,3 +42,35 @@ searchToggle.addEventListener("click", ()=>{
 searchClose.addEventListener("click", ()=>{
     searchWrap.classList.remove("search_wrapper_active");
 }) 
+
+
+
+
+// cart drawer js start
+document.querySelectorAll("form[action='/cart/add']").forEach((form)=>{
+    form.addEventListener("submit", async (e)=>{
+        console.log(e.currentTarget)
+        e.preventDefault();
+
+        // Submit form with ajax
+       await fetch("/cart/add",{
+            method: "post",
+            body: new FormData(form)
+        })
+
+        // Open cart drawer
+        document.querySelector(".cart-drawer").classList.add("cart-drawer-active");
+
+        // clsoe cart drwer
+        document.querySelectorAll(".cart-drawer, .close-drawer").forEach((el)=>{
+            el.addEventListener("click", ()=>{
+                document.querySelector(".cart-drawer").classList.remove("cart-drawer-active");
+            })
+        })
+
+        document.querySelector(".cart-drawer-box").addEventListener("click", (e)=>{
+            e.stopPropagation();
+        })
+
+    })
+})

@@ -1,3 +1,8 @@
 .search_wrapper_active {
     display: block;
 }
+
+.cart-drawer-active
+{
+    display: block !important;
+}

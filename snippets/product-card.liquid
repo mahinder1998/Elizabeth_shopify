@@ -20,6 +20,17 @@
       {% endif %}
       <a href="{{ product_product.url }}" class="text-gray-700 uppercase font-medium">{{ product_product.title }}</a>
       <p class="text-gray-500 ">{{ product_product.price | money }}</p>
+
+      {% comment %} Add to cart button {% endcomment %}
+
+      {% if product_product.available %}
+      <form method="post" action="/cart/add">
+      <input type="hidden" name="id" value="{{ product_product.first_available_variant.id }}" />
+      <input type="hidden" min="1" type="number" id="quantity" name="quantity" value="1"/>
+      <input type="submit" value="Add to cart" class="button bg-black p-2 inline-block text-white rounded-md mt-2 hover:bg-orange-500 transition-all cursor-pointer w-full"/>
+    </form>
+      {% endif %}
+
     </div>
   </div>
 </div>
