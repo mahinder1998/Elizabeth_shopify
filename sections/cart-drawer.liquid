@@ -1,0 +1,63 @@
+
+<div class="cart-drawer bg-[rgba(0,0,0,.5)] z-20 p-5 absolute  top-0 bottom-0 right-0 left-0 rounded-md hidden">
+    <div class="cart-drawer-box bg-slate-200 w-1/3 h-full p-5">
+        <header class="cart-drawer-header flex justify-between pb-5  items-center border-b border-b-gray-300">
+            <div><h2 class="font-bold">Your Cart</h2></div>
+            <div class="count flex justify-between space-x-2">
+                <span>{{cart.item_count}} Items</span>
+                <button class="close-drawer">
+                    {% render 'close.svg' %}
+                </button>
+            </div>
+        </header>
+        <div class="drawer-body h-[calc(100% - 40px)]"> 
+            {% form 'cart', cart, class:'cart-drawer-form ' %}
+            <cart-body class="p-5">
+                {% if cart.item_count == 0 %}
+                <p>Your card is empty</p>
+                {%else%} {% for item in cart.items %}
+                <div class="cart-items grid grid-cols-[100px,1fr] bg-white mb-4">
+                    <div class="image-col">
+                        <img src="{{item.image | img_url: '200x'}}" class="h-full object-cover" alt="{{item.title}}" />
+                    </div>
+                    <div class="description-col flex items-center p-4">
+                        <div class="w-10/12">
+                            <h3 class="font-bold">{{item.product.title}}</h3>
+                            <p class="text-sm">{{item.variant.title}}</p>
+                            <div class="qty-selector flex mt-2">
+                                <button class="qty-minus border border-gray-300">
+                                    {% render 'minus.svg' %}
+                                </button>
+                                <input class="w-6 border border-gray-300 text-center pointer-events-none" name="quantity" value="{{item.quantity}}" />
+                                <button class="qty-plus border border-gray-300">
+                                    {% render 'plus.svg' %}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="w-2/12">
+                            {% comment %} <a href="{{item.url_to_remove}}">Remove</a> {% endcomment %}
+                            <p class="text-sm font-bold">{{item.price | money}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %} {%endif%}
+            </cart-body>
+
+            <footer class="cart-footer">
+                <p>{{cart.discounts}}</p>
+                <p>{{ cart.total_price}}</p>
+                <button type="submit">Checkout</button>
+            </footer>
+            {% endform %}
+        </div>
+    </div>
+</div>
+
+  
+{% schema %}
+  {
+    "name": "Cart Drawer",
+    "settings": []
+  }
+{% endschema %}
