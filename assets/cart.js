@@ -45,9 +45,8 @@ formatMoney = function(cents, format) {
 
 const loader = document.querySelector(".loader");
 
-
 document.querySelectorAll(".cart-quantity-selector button").forEach((button)=>{
-    button.addEventListener("click", ()=>{
+    button.addEventListener("click",  async ()=>{
         const input = button.parentElement.querySelector("input");
         const value = Number(input.value);
         const isPlus = button.classList.contains("plus");
@@ -57,18 +56,18 @@ document.querySelectorAll(".cart-quantity-selector button").forEach((button)=>{
         if(isPlus){
             const newValue = value + 1
             input.value = newValue ;
-            changeItemQuantity(key, newValue);
+            await changeItemQuantity(key, newValue);
         }else if(value > 1){
             const newValue = value - 1;
             input.value = newValue;
-            changeItemQuantity(key, newValue);
+            await  changeItemQuantity(key, newValue);
         }
 
     })
 })
 
 
-function changeItemQuantity(key, quantity) {
+async function changeItemQuantity(key, quantity) {
     fetch('/cart/change.js', {
         method: 'POST',
         headers: {
