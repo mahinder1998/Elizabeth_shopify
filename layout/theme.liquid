@@ -14,12 +14,13 @@
    
   </head>
   <body>
-    <h1>hello</h1>
     {% section 'header' %}
     {% section 'cart-drawer' %}
     <main role="main">
       {{ content_for_layout }}
     </main>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/url-parse@1.5.10/dist/url-parse.min.js"></script>
   {{ 'application.js' | asset_url | script_tag }} 
+
 </html>

@@ -24,8 +24,8 @@
 
 <div class="max-w-6xl mx-auto my-8">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-    <div class="product--medias">
-      <div class="hidden md:block">
+    <div class="product--medias"> 
+      <div class="sm:hidden md:block">
         {% for media in product.media %}
           <div class="h-100 overflow-hidden p-2">
             {% render 'product-media', media: media %}
@@ -55,7 +55,7 @@
     </div>
     <div class="product--information sticky top-5 p-2">
       {% form 'product', product %}
-        <input type="hidden" name="id" value="{{ selected_variant.id }}">
+        <input id="product-id" type="hidden" name="id" value="{{ selected_variant.id }}">
         {% for block in section.blocks %}
           {% case block.type %}
             {% when "vendor" %}
@@ -69,18 +69,54 @@
                 <h1 class="text-3xl text-gray-900">{{ product.title }}</h1>
               </div>
             {% when "price" %}
-              <div class="my-3">
+              <div class="product-prices flex space-x-2">
+                <div class="product-compare line-through text-gray-400
+                  {%  unless product.selected_or_first_available_variant.compare_at_price < product.selected_or_first_available_variant.price %} hidden  {% endunless %}                 
+                ">
+                  {{product.selected_or_first_available_variant.compare_at_price |  money}}
+                </div>
+                <div class="product-price">
+                  {{product.selected_or_first_available_variant.price |  money}}
+                </div>
+              </div>
+
+              {% comment %} <div class="my-3">
                 {% assign product_price = selected_variant %}
-                <span class="text-base text-gray-500 line-through">{{ selected_variant.compare_at_price | money }}</span>
+                <span class="text-base text-gray-500 line-through">{{ product_price.compare_at_price | money }}</span>
                 <span class="text-lg text-gray-900">
-                  {{ selected_variant.price | money }}
+                  {{ product_price.price | money }}
                 </span>
-                {% if selected_variant.price < selected_variant.compare_at_price %}
+                {% if product_price.price < product_price.compare_at_price %}
                   <span class="px-5 py-1 text-sm font-bold bg-red-500 rounded-full text-white mx-4">Sale</span>
                 {% endif %}
-              </div>
+              </div> {% endcomment %}
             {% when 'variant_selector' %}
-              <div class="my-2">
+
+              {% if product.variants.size > 1 %}
+              <div class="product-option">
+                {% for option in product.options_with_values %}
+                  <fieldset>
+                    <legend>{{option.name}}</legend>
+                    {% for value in option.values %}
+                        <div>
+                          <input 
+                          {% if option.selected_value == value %} checked {% endif %}
+                          type="radio" name="{{option.name}}"
+                          value="{{value}}"
+                          id="{{option.name |  handleize}}--{{value |  handleize}}"
+                          >
+                          <label for="{{option.name |  handleize}}--{{value |  handleize}}">
+                            {{value}}
+                          </label>
+                        </div>
+                    {% endfor %}
+                  </fieldset>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+
+              {% comment %} <div class="my-2">
               {% unless product.has_only_default_variant %}
                 <div data-url="{{product.url}}" data-section="{{section.id}}">
                   {% for option in product.options_with_values %}
@@ -102,7 +138,7 @@
                   {% endfor %}
                 </div>
               {% endunless %}
-            </div>
+            </div> {% endcomment %}
 
             {% when "quantity" %}
               <div class="my-3">
@@ -167,6 +203,57 @@
       prevEl: '.swiper-button-prev'
     }
   });
+
+
+  // product swatches custom code start here...
+
+  let product = {{product |  json}};
+  console.log(product)
+
+  document.querySelectorAll('.product-option input[type="radio"]').forEach(radio=>{
+    radio.addEventListener("change", ()=>{
+
+      // Find selected options
+      let selectedOptions = []
+      document.querySelectorAll('.product-option input[type="radio"]:checked').forEach(radio=>{
+        selectedOptions.push(radio.value);
+      })
+
+      // Finding the matched variant
+      let matchedVariant = product.variants.find(variant =>{
+        let pass = true;
+        for(let i =0; i < selectedOptions.length; i++){
+          if(selectedOptions.indexOf(variant.options[i]) === -1){
+            pass = false;
+            break
+          }
+        }
+        return pass;
+      })
+
+      console.log(matchedVariant, "matchedVariant")
+
+      // change product form product.variant id
+      document.querySelector("#product-id").value = matchedVariant.id;
+
+
+      let url = new URLParse(window.location.href, true);
+      url.query.variant = matchedVariant.id;
+      //console.log(url.toString(), "url is here")
+      window.history.replaceState(null, null, url);
+
+      // Price changes
+      document.querySelector(".product-price").textContent = formatMoney(matchedVariant.price, "{{shop.money_format}}");
+      document.querySelector(".product-compare").textContent = formatMoney(matchedVariant.compare_at_price, "{{shop.money_format}}");
+
+      matchedVariant.compare_at_price < matchedVariant.price ?
+      document.querySelector(".product-compare").classList.remove("hidden"):
+      document.querySelector(".product-compare").classList.add("hidden")
+      
+    })
+  })
+
+
 </script>
 
 

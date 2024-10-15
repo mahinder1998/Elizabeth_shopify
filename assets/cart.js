@@ -84,7 +84,11 @@ async function changeItemQuantity(key, quantity) {
       loader.classList.add("flex");
       loader.classList.remove("hidden");
 
-        console.log(res, "res here==>")
+        console.log(res, "res here==>");
+
+      // update cart item count
+      const itemCount = res.item_count;
+      document.querySelector(".cart_count").innerHTML = itemCount;
 
         const format = document.querySelector("[data-money-format]").getAttribute("data-money-format");
 
@@ -149,12 +153,19 @@ document.querySelectorAll(".item-remove").forEach((remove)=>{
           `;
 
           document.querySelector(".cart-container").appendChild(html);
+          document.querySelector(".cart_count").remove();
 
         }else{
           loader.classList.add("flex");
           loader.classList.remove("hidden");
 
           item.remove(); 
+
+          // update cart item count
+        let itemCount = res.item_count;
+        console.log(itemCount, "itemCount")
+        document.querySelector(".cart_count").innerHTML = itemCount;
+
           const format = document.querySelector("[data-money-format]").getAttribute("data-money-format");
           const totalDiscount = formatMoney(res.total_discount, format);
           const totalPrice = formatMoney(res.total_price, format);
