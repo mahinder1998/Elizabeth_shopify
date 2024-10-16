@@ -6,3 +6,8 @@
 {
     display: block !important;
 }
+
+
+.product-image-thumbs li.selected{
+    border: 2px solid red;
+}
