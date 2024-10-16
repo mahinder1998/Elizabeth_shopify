@@ -25,7 +25,20 @@
 <div class="max-w-6xl mx-auto my-8">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
     <div class="product--medias"> 
-      <div class="sm:hidden md:block">
+
+    {% if product.selected_or_first_available_variant.featured_image %}
+      {% assign featured = product.selected_or_first_available_variant.featured_image %}
+        <img class="w-full" id="product-image" src="{{ featured |  img_url: 'medium'}} ">
+      {% else %}
+      {% assign featured = product.featured_image %}
+        <img class="w-full" id="product-image" src="{{featured |  img_url: 'medium' }}">
+      {% endif %}
+      <ul class="product-image-thumbs flex space-x-5 mt-4">
+        {% for image in product.images %}
+            <li class="w-20 {% if image == featured %} selected {% endif %}"><img src="{{image |  img_url: 'master' }}"></li>
+        {% endfor %}
+      </ul>
+      {% comment %} <div class="sm:hidden md:block">
         {% for media in product.media %}
           <div class="h-100 overflow-hidden p-2">
             {% render 'product-media', media: media %}
@@ -50,7 +63,7 @@
           <div class="swiper-button-next"></div>
 
         </div>
-      </div>
+      </div> {% endcomment %}
 
     </div>
     <div class="product--information sticky top-5 p-2">
@@ -141,7 +154,7 @@
             </div> {% endcomment %}
 
             {% when "quantity" %}
-              <div class="my-3">
+              {% comment %} <div class="my-3">
                 <label for="Quantity-{{section.id}}">Quantity</label>
                 <div class="my-2">
                   <input
@@ -152,7 +165,24 @@
                     min="1"
                     class="w-full border px-3 py-3 ">
                 </div>
+              </div> {% endcomment %}
+
+              <div class="quantity-selector">
+                <button type="button" class="quantity-selector-minus">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                  </svg>
+                </button>
+                <input id="quantity" name="quantity" value="1" readonly class="border px-3 py-3 quantity-selector-inputSelector">
+                <button type="button" class="quantity-selector-plus">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </button>
               </div>
+
+
+
 
               {% when "description" %}
                 <div class="my-3">
@@ -163,7 +193,7 @@
 
               {% when "checkout_buttons" %}
                 <div class="my-3">
-                <button
+                {% comment %} <button
                   type="submit"
                   name="add"
                   class="w-full px-6 py-4 bg-gray-900 text-white hover:bg-gray-700 rounded-sm my-2"
@@ -173,7 +203,23 @@
                   {% else %}
                     Add to Cart
                   {% endif %}
-                </button>
+                </button> {% endcomment %}
+
+              <button type="submit" id="add-to-cart" class="product-add w-full px-6 py-4 bg-gray-900 text-white hover:bg-gray-700 rounded-sm my-2 {% unless  product.selected_or_first_available_variant.available %} disabled {% endunless %}">
+                  {% if product.selected_or_first_available_variant.available %}
+                    Add to cart
+                  {% else %}
+                    Out of stock
+                  {% endif %}
+              </button>
+              <button type="submit" id="buy-it-now" class="product-add w-full px-6 py-4 bg-gray-900 text-white hover:bg-gray-700 rounded-sm my-2 {% unless  product.selected_or_first_available_variant.available %} disabled {% endunless %}">
+                {% if product.selected_or_first_available_variant.available %}
+                  Buy it Now
+                {% else %}
+                  Out of stock
+                {% endif %}
+              </button>
+
               </div>
 
 
@@ -206,10 +252,8 @@
 
 
   // product swatches custom code start here...
-
   let product = {{product |  json}};
   console.log(product)
-
   document.querySelectorAll('.product-option input[type="radio"]').forEach(radio=>{
     radio.addEventListener("change", ()=>{
 
@@ -248,11 +292,84 @@
 
       matchedVariant.compare_at_price < matchedVariant.price ?
       document.querySelector(".product-compare").classList.remove("hidden"):
-      document.querySelector(".product-compare").classList.add("hidden")
-      
+      document.querySelector(".product-compare").classList.add("hidden");
+
+
+
+      // images chnages
+      console.log(matchedVariant, "matchedVariant is here == >>");
+      if(matchedVariant.featured_image){
+        document.querySelector('#product-image').setAttribute('src', matchedVariant.featured_image.src);  
+        document.querySelector(".product-image-thumbs li.selected").classList.remove("selected");
+        //console.log(matchedVariant.featured_image, "matchedVariant.featured_image ...")
+        document.querySelectorAll(".product-image-thumbs li")[matchedVariant.featured_image.position -1].classList.add("selected")
+
+      }
+
+
+      // button
+      let add = document.querySelector("#add-to-cart");
+      let buy = document.querySelector("#buy-it-now");
+      if(matchedVariant.available){
+        add.textContent = "Add to Cart";
+        add.disabled = false;
+        buy.textContent = "Buy it now";
+        add.disabled = false;
+      }else{
+        add.textContent = "Out of Stock";
+        add.disabled = true;
+        buy.textContent = "Out of Stock";
+        buy.disabled = true;
+      }
+
     })
   })
 
+
+//
+document.querySelectorAll(".product-image-thumbs li").forEach(li=>{
+  li.addEventListener("click", ()=>{
+    document.querySelector(".product-image-thumbs li.selected").classList.remove("selected");
+    li.classList.add("selected");
+    //console.log(li.querySelector('img').getAttribute('src'), "here is images")
+    document.querySelector('#product-image').setAttribute('src', li.querySelector('img').getAttribute('src'));
+
+  })
+})
+
+
+
+// buy now
+
+document.querySelector("#buy-it-now").addEventListener("click", (e)=>{
+      e.preventDefault();
+
+      //<input type="hidden" name="return_to" value="/checkout/">
+
+      let form = document.querySelector(".shopify-product-form");
+
+      let input = document.createElement("input");
+      input.value="/checkout/";
+      input.type= "hidden";
+      input.name="return_to";
+
+      form.appendChild(input);
+      form.submit();
+})
+
+
+// quantity selector
+document.querySelector(".quantity-selector-plus").addEventListener("click", ()=>{
+   let currentValue = Number(document.querySelector("#quantity").value);
+   document.querySelector("#quantity").value = currentValue + 1;
+})
+
+document.querySelector(".quantity-selector-minus").addEventListener("click", ()=>{
+   let currentValue = Number(document.querySelector("#quantity").value);
+   if(currentValue>1){
+     document.querySelector("#quantity").value = currentValue - 1;
+   }
+})
 
 </script>
 
