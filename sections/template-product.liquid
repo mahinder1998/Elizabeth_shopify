@@ -256,14 +256,20 @@
   // product swatches custom code start here...
   let product = {{product |  json}};
   console.log(product, "main product")
+  
   document.querySelectorAll('.product-option input[type="radio"]').forEach(radio=>{
     radio.addEventListener("change", ()=>{
 
       // Find selected options
       let selectedOptions = []
+
+      console.log(selectedOptions, "selectedOptions before")
+      
       document.querySelectorAll('.product-option input[type="radio"]:checked').forEach(radio=>{
         selectedOptions.push(radio.value);
       })
+
+       console.log(selectedOptions, "selectedOptions after")
 
       // Finding the matched variant
       let matchedVariant = product.variants.find(variant =>{
