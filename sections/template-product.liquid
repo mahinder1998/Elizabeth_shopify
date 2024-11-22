@@ -251,9 +251,11 @@
   });
 
 
+
+  
   // product swatches custom code start here...
   let product = {{product |  json}};
-  console.log(product)
+  console.log(product, "main product")
   document.querySelectorAll('.product-option input[type="radio"]').forEach(radio=>{
     radio.addEventListener("change", ()=>{
 
